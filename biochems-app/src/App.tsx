@@ -17,6 +17,8 @@ import {
 } from './data/biomedData'
 
 function App() {
+  console.log('App component rendering...')
+  
   const {
     data: practiceQuestions = [],
     isLoading: practiceLoading,
@@ -35,13 +37,35 @@ function App() {
       }
     : null
 
+  // Validate required data before rendering
+  if (!modules || !Array.isArray(modules)) {
+    console.error('Modules data is invalid:', modules)
+    return <div className="app-shell">Error: Module data failed to load</div>
+  }
+
+  if (!flashcards || !Array.isArray(flashcards)) {
+    console.error('Flashcards data is invalid:', flashcards)
+    return <div className="app-shell">Error: Flashcard data failed to load</div>
+  }
+
+  console.log('App rendering with data:', {
+    modules: modules?.length || 0,
+    flashcards: flashcards?.length || 0,
+    practiceQuestions: practiceQuestions?.length || 0,
+    sessionId,
+  })
+
   return (
     <div className="app-shell">
-      <Hero
-        nextExamDate={examPlan.nextExam}
-        focusBlock={examPlan.focusBlock}
-        objective={examPlan.objective}
-      />
+      {examPlan?.nextExam && examPlan?.focusBlock && examPlan?.objective ? (
+        <Hero
+          nextExamDate={examPlan.nextExam}
+          focusBlock={examPlan.focusBlock}
+          objective={examPlan.objective}
+        />
+      ) : (
+        <div>Loading exam plan...</div>
+      )}
 
       <main className="layout">
         <section className="panel panel--wide">
@@ -49,7 +73,11 @@ function App() {
             <p className="eyebrow">Systems snapshot</p>
             <h2>Stay ahead of the biomedical curve</h2>
           </div>
-          <ModuleGrid modules={modules} />
+          {modules && Array.isArray(modules) && modules.length > 0 ? (
+            <ModuleGrid modules={modules} />
+          ) : (
+            <div>Loading modules...</div>
+          )}
         </section>
 
         <section className="panel panel--split">
@@ -60,18 +88,30 @@ function App() {
               Unable to load practice questions right now.
             </div>
           ) : (
-            <QuestionBank questions={practiceQuestions} />
+            <QuestionBank questions={practiceQuestions || []} />
           )}
-          <FlashcardCarousel flashcards={flashcards} />
+          {flashcards && Array.isArray(flashcards) && flashcards.length > 0 ? (
+            <FlashcardCarousel flashcards={flashcards} />
+          ) : (
+            <div>Loading flashcards...</div>
+          )}
         </section>
 
         <section className="panel panel--split">
-          <QuizGenerator modules={modules} />
-          <ProgressPanel
-            progress={progressMetrics}
-            overview={studyOverview}
-            activeSession={activeSession}
-          />
+          {modules && Array.isArray(modules) && modules.length > 0 ? (
+            <QuizGenerator modules={modules} />
+          ) : (
+            <div>Loading quiz generator...</div>
+          )}
+          {progressMetrics && studyOverview ? (
+            <ProgressPanel
+              progress={progressMetrics}
+              overview={studyOverview}
+              activeSession={activeSession}
+            />
+          ) : (
+            <div>Loading progress...</div>
+          )}
         </section>
 
         <section className="panel panel--wide">
@@ -79,7 +119,11 @@ function App() {
             <p className="eyebrow">Go-to resources</p>
             <h2>Keep momentum with curated assets</h2>
           </div>
-          <ResourceStrip resources={resourceLinks} />
+          {resourceLinks && Array.isArray(resourceLinks) && resourceLinks.length > 0 ? (
+            <ResourceStrip resources={resourceLinks} />
+          ) : (
+            <div>Loading resources...</div>
+          )}
         </section>
       </main>
     </div>
