@@ -16,14 +16,35 @@ import {
   studyOverview,
 } from './data/biomedData'
 
+// Defensive checks for data imports
+if (!examPlan) {
+  console.error('examPlan is undefined!')
+}
+if (!modules || !Array.isArray(modules)) {
+  console.error('modules is undefined or not an array!', modules)
+}
+if (!flashcards || !Array.isArray(flashcards)) {
+  console.error('flashcards is undefined or not an array!', flashcards)
+}
+
+console.log('Data loaded:', { 
+  examPlan: !!examPlan, 
+  modules: modules?.length, 
+  flashcards: flashcards?.length,
+  progressMetrics: !!progressMetrics,
+  resourceLinks: resourceLinks?.length,
+  studyOverview: !!studyOverview
+})
+
 function App() {
   console.log('App component rendering...')
   
-  const {
-    data: practiceQuestions = [],
-    isLoading: practiceLoading,
-    isError: practiceError,
-  } = usePracticeQuestions()
+  try {
+    const {
+      data: practiceQuestions = [],
+      isLoading: practiceLoading,
+      isError: practiceError,
+    } = usePracticeQuestions()
   
   // Use a single selector to avoid multiple subscriptions
   const quizSession = useQuizSessionStore((state) => ({
@@ -131,6 +152,18 @@ function App() {
       </main>
     </div>
   )
+  } catch (error) {
+    console.error('App component error:', error)
+    return (
+      <div className="app-shell">
+        <div style={{ padding: '20px', color: 'red', backgroundColor: '#ffe6e6' }}>
+          <h2>App Error</h2>
+          <p>Something went wrong: {(error as Error).message}</p>
+          <pre>{(error as Error).stack}</pre>
+        </div>
+      </div>
+    )
+  }
 }
 
 export default App

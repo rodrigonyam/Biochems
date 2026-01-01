@@ -4,18 +4,18 @@ export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
-      retry: (failureCount, error) => {
+      retry: (_failureCount, error) => {
         console.error('Query error:', error)
-        return failureCount < 1
+        return _failureCount < 1
       },
       staleTime: 1000 * 60,
     },
     mutations: {
-      retry: (failureCount, error) => {
+      retry: (_failureCount, error) => {
         console.error('Mutation error:', error)
         return false
       },
-      onError: (error, variables, context) => {
+      onError: (error, variables, _context) => {
         console.error('Mutation failed:', error, variables)
       },
     },

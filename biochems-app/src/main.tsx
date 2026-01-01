@@ -7,6 +7,18 @@ import { ErrorBoundary } from './components/ErrorBoundary.tsx'
 
 console.log('Main.tsx loading...')
 
+// Global error handler
+window.addEventListener('error', (event) => {
+  console.error('Global error caught:', event.error)
+  console.error('Error message:', event.message)
+  console.error('Error filename:', event.filename)
+  console.error('Error lineno:', event.lineno)
+})
+
+window.addEventListener('unhandledrejection', (event) => {
+  console.error('Unhandled promise rejection:', event.reason)
+})
+
 const rootElement = document.getElementById('root')
 if (!rootElement) {
   document.body.innerHTML = '<div style="padding:20px;color:red;">Root element not found</div>'
