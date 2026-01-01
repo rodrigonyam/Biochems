@@ -7,7 +7,7 @@ type QuestionBankProps = {
 }
 
 const QuestionBank: FC<QuestionBankProps> = ({ questions }) => {
-  const [expanded, setExpanded] = useState<Set<number>>(new Set())
+  const [expanded, setExpanded] = useState<Set<number>>(() => new Set())
 
   const toggleQuestion = (id: number) => {
     setExpanded((prev) => {

@@ -2,7 +2,7 @@ import { useQuery, type UseQueryResult } from '@tanstack/react-query'
 import { mockApi } from '../services/mockApi'
 import type { PracticeQuestion } from '../types/study'
 
-const practiceQuestionsKey = ['practiceQuestions']
+const practiceQuestionsKey = ['practiceQuestions'] as const
 
 export const usePracticeQuestions = (): UseQueryResult<PracticeQuestion[]> => {
   return useQuery({
@@ -21,5 +21,8 @@ export const usePracticeQuestions = (): UseQueryResult<PracticeQuestion[]> => {
     staleTime: 1000 * 60 * 5,
     enabled: typeof window !== 'undefined',
     retry: false,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   })
 }

@@ -25,15 +25,18 @@ function App() {
     isError: practiceError,
   } = usePracticeQuestions()
   
-  const sessionId = useQuizSessionStore((state) => state.sessionId)
-  const sequence = useQuizSessionStore((state) => state.sequence)
-  const lastPlan = useQuizSessionStore((state) => state.lastPlan)
+  // Use a single selector to avoid multiple subscriptions
+  const quizSession = useQuizSessionStore((state) => ({
+    sessionId: state.sessionId,
+    sequence: state.sequence,
+    lastPlan: state.lastPlan,
+  }))
   
-  const activeSession = sessionId
+  const activeSession = quizSession.sessionId
     ? {
-        sessionId,
-        sequence,
-        plan: lastPlan,
+        sessionId: quizSession.sessionId,
+        sequence: quizSession.sequence,
+        plan: quizSession.lastPlan,
       }
     : null
 
@@ -52,7 +55,7 @@ function App() {
     modules: modules?.length || 0,
     flashcards: flashcards?.length || 0,
     practiceQuestions: practiceQuestions?.length || 0,
-    sessionId,
+    sessionId: quizSession.sessionId,
   })
 
   return (

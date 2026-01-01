@@ -13,8 +13,11 @@ export const useQuizQuestion = () => {
         sessionSequence: sequence + 1,
         seed,
       })
-      applyResponse(response)
       return response
+    },
+    onSuccess: (response) => {
+      // Move store update to onSuccess to prevent infinite loops
+      applyResponse(response)
     },
   })
 }
