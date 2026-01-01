@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/biochems-app/dist/$1"
+    }
+  ]
+}
