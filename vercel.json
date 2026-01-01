@@ -1,0 +1,7 @@
+{
+  "buildCommand": "cd biochems-app && npm run build",
+  "outputDirectory": "biochems-app/dist",
+  "installCommand": "cd biochems-app && npm install",
+  "devCommand": "cd biochems-app && npm run dev",
+  "framework": "vite"
+}
