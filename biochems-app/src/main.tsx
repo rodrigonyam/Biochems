@@ -10,17 +10,21 @@ console.log('Main.tsx loading...')
 
 const rootElement = document.getElementById('root')
 if (!rootElement) {
+  document.body.innerHTML = '<div style="padding:20px;color:red;">Root element not found</div>'
   throw new Error('Root element not found')
 }
 
 console.log('Root element found, rendering app...')
 
-createRoot(rootElement).render(
-  <StrictMode>
+try {
+  createRoot(rootElement).render(
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <App />
       </QueryClientProvider>
     </ErrorBoundary>
-  </StrictMode>,
-)
+  )
+} catch (error) {
+  console.error('Failed to render app:', error)
+  rootElement.innerHTML = '<div style="padding:20px;color:red;">Failed to render app: ' + (error as Error).message + '</div>'
+}

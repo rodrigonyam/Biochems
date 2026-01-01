@@ -22,11 +22,11 @@ function App() {
     isLoading: practiceLoading,
     isError: practiceError,
   } = usePracticeQuestions()
-  const { sessionId, sequence, lastPlan } = useQuizSessionStore((state) => ({
-    sessionId: state.sessionId,
-    sequence: state.sequence,
-    lastPlan: state.lastPlan,
-  }))
+  
+  const sessionId = useQuizSessionStore((state) => state.sessionId)
+  const sequence = useQuizSessionStore((state) => state.sequence)
+  const lastPlan = useQuizSessionStore((state) => state.lastPlan)
+  
   const activeSession = sessionId
     ? {
         sessionId,
